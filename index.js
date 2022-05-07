@@ -35,6 +35,30 @@ async function run(){
             const bike = await bikeCollection.findOne(query);
             res.send(bike);
         })
+
+//update stock
+        app.put('/bike/:id', async (req, res) =>{
+            const id = req.params.id;
+            const updatedStock = req.body;
+            const filter = {_id : ObjectId(id)};
+            const options = {upsert : true};
+            const updateDoc = {
+                $set: {
+                    stock : updatedStock.stock 
+                    
+                }
+            };
+            const result = await bikeCollection.updateOne(filter, updateDoc, options)
+            res.send(result);
+        })
+
+        //Delete api
+        app.delete('/bike/:id', async(req, res) =>{
+            const id = req.params.id;
+        const query = {_id : ObjectId(id)};
+        const result = await bikeCollection.deleteOne(query);
+        res.send(result);
+        })
     }
     finally{
 
