@@ -28,7 +28,7 @@ async function run(){
             const bikes = await cursor.toArray();
             res.send(bikes);
         })
-
+            //Get API For individual Product
         app.get('/bike/:id', async(req, res)=>{
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
@@ -45,7 +45,6 @@ async function run(){
             const updateDoc = {
                 $set: {
                     stock : updatedStock.stock 
-                    
                 }
             };
             const result = await bikeCollection.updateOne(filter, updateDoc, options)
