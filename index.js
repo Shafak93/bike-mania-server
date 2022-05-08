@@ -4,8 +4,10 @@ require('dotenv').config();
 const port = process.env.PORT || 5000;
 const app = express();
 
+//Middleware
 app.use(cors());
 app.use(express.json());
+
 
 app.get('/', (req, res)=>{
     res.send('Running')
@@ -22,13 +24,15 @@ async function run(){
         await client.connect();
         const bikeCollection = client.db('bikeDB').collection('bike');
 
+        //Get API : All Product
         app.get('/bike', async (req, res) =>{
             const query = {};
             const cursor = bikeCollection.find(query);
             const bikes = await cursor.toArray();
             res.send(bikes);
         })
-            //Get API For individual Product
+        
+        //Get API For individual Product
         app.get('/bike/:id', async(req, res)=>{
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
@@ -36,7 +40,7 @@ async function run(){
             res.send(bike);
         })
 
-//update stock
+        //PUT API : Update stock
         app.put('/bike/:id', async (req, res) =>{
             const id = req.params.id;
             const updatedStock = req.body;
@@ -51,14 +55,14 @@ async function run(){
             res.send(result);
         })
 
-        //POST data : Add Product
+        //POST API : Add Product
         app.post('/bike', async(req, res)=>{
             const newProduct = req.body;
             const result = await bikeCollection.insertOne(newProduct);
             res.send(result);
         })
 
-        //Delete api
+        //Delete API : Remove product
         app.delete('/bike/:id', async(req, res) =>{
             const id = req.params.id;
         const query = {_id : ObjectId(id)};
